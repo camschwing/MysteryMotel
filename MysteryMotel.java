@@ -1,4 +1,4 @@
-//JACK AND CAM 
+//JACK AND CAM
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +15,7 @@ public class MysteryMotel {
 
     public static void main(String[] args) {
         initializeGame();
-
+        
         while (true) {
             printRoom();
             String command = getUserInput();
@@ -32,9 +32,8 @@ public class MysteryMotel {
 
     static void printRoom() {
         System.out.println(currentRoom.getDescription());
-        System.out.println("Items in the room: " + getItemList(currentRoom.getItems()));
-        
         ArrayList<Item> items = currentRoom.getItems();
+        
         if (items != null && !items.isEmpty()) {
             System.out.println("Items in the room: " + getItemList(items));
         } else {
@@ -46,8 +45,9 @@ public class MysteryMotel {
         if (items.isEmpty()) {
             return "None";
         }
-
+        
         StringBuilder itemList = new StringBuilder();
+        
         if (!items.isEmpty()) {
             itemList.append(items.get(0).getName()).append(", ");
         } else {
@@ -82,10 +82,11 @@ public class MysteryMotel {
             default:
                 System.out.println("Invalid command. Try again.");
         }
+        for (int i = 0; i < 50; ++i) System.out.println();
     }
 
     static void move(String direction) {
-        if ("north".equals(direction) && currentRoom.equals(room1)) {
+        if (direction.equals("north") && currentRoom.equals(room1)) {
             currentRoom = room2;
             System.out.println("You enter the motel lobby.");
         if (!investigatedCrimeScene) {
@@ -121,16 +122,21 @@ public class MysteryMotel {
         }
     }
 
-    
+
     static Character detective;
     static Character motelOwner;
     static Character stranger;
 
-    static void initializeGame() {
+     public static void initializeGame() {
         // Define characters
         detective = new Character("Detective Smith", false);
         motelOwner = new Character("Mr. Johnson", false);
         stranger = new Character("Mysterious Stranger", true);
+        
+        Item key = new Item("Key", "An old rusty key.");
+        Item book = new Item("Book", "A book with strange symbols.");
+        
+        
         ArrayList<Item> room1Items = new ArrayList<>();
         room1Items.add(key);
 
@@ -140,14 +146,17 @@ public class MysteryMotel {
         // Define items with descriptions
         Room room1 = new Room("You are in a dark room. Detective Smith, the seasoned investigator, is here.", room1Items);
         Room room2 = new Room("You are in the motel lobby. Mr. Johnson, the owner, is behind the counter.", room2Items);
-
-        Item key = new Item("Key", "An old rusty key.");
-        Item book = new Item("Book", "A book with strange symbols.");
-
+       
+        
         currentRoom = room1;
+        
+        MysteryMotel.room1 = room1;
+        MysteryMotel.room2 = room2;
+        
+        for (int i = 0; i < 50; ++i) System.out.println();
     }
 
-    
+
 
     static void investigateCrimeScene() {
         System.out.println("Detective Smith asks you to investigate the crime scene.");
