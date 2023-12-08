@@ -1,3 +1,5 @@
+package main;
+
 public class Item extends MysteryMotel {
     public String name;
     public String description;

@@ -1,15 +1,17 @@
+package main;
+
 import java.util.ArrayList;
 
 public class Room extends MysteryMotel {
-    public String description;
+    public String name;
     public ArrayList<Item> items;
 
-    public Room(String description, ArrayList<Item> items) {
-        this.description = description;
+    public Room(String name, ArrayList<Item> items) {
+        this.name = name;
         this.items = items;
     }
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
     public ArrayList<Item> getItems() {

@@ -1,4 +1,7 @@
 //JACK AND CAM
+
+package main;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,6 +10,7 @@ public class MysteryMotel {
     static boolean escaped = false;
     static Room room1;
     static Room room2;
+    static Room pastRoom;
     static Item key;
     static Item book;
     static ArrayList<Item> inventory = new ArrayList<>();
@@ -20,7 +24,7 @@ public class MysteryMotel {
             printRoom();
             String command = getUserInput();
             processCommand(command);
-
+            
             if (gameOver()) {
                 System.out.println("Game Over");
                 printEndMessage();
@@ -31,7 +35,6 @@ public class MysteryMotel {
 
 
     static void printRoom() {
-        System.out.println(currentRoom.getDescription());
         ArrayList<Item> items = currentRoom.getItems();
         
         if (items != null && !items.isEmpty()) {
@@ -63,6 +66,10 @@ public class MysteryMotel {
     }
 
     static void processCommand(String command) {
+    	for (int i = 0; i < 50; ++i) System.out.println();
+    	
+    	pastRoom = currentRoom;
+    	
         switch (command) {
             case "north":
             case "east":
@@ -82,22 +89,24 @@ public class MysteryMotel {
             default:
                 System.out.println("Invalid command. Try again.");
         }
-        for (int i = 0; i < 50; ++i) System.out.println();
     }
 
     static void move(String direction) {
         if (direction.equals("north") && currentRoom.equals(room1)) {
-            currentRoom = room2;
-            System.out.println("You enter the motel lobby.");
+        	enterRoom(room2);
         if (!investigatedCrimeScene) {
             investigateCrimeScene();
         }
         } else if ("south".equals(direction) && currentRoom.equals(room2)) {
-            currentRoom = room1;
-            System.out.println("You return to the dark room.");
+        	enterRoom(room1);
 }
     }
 
+    static void enterRoom(Room room) {
+    	currentRoom = room;
+		System.out.println((String.format("You are now in the %s.", currentRoom.getName())));
+    }
+    
     static void search() {
         System.out.println("Searching the room...");
         System.out.println("You find: " + getItemList(currentRoom.items));
@@ -144,8 +153,8 @@ public class MysteryMotel {
         room2Items.add(book);
 
         // Define items with descriptions
-        Room room1 = new Room("You are in a dark room. Detective Smith, the seasoned investigator, is here.", room1Items);
-        Room room2 = new Room("You are in the motel lobby. Mr. Johnson, the owner, is behind the counter.", room2Items);
+        Room room1 = new Room("dark room", room1Items);
+        Room room2 = new Room("motel lobby", room2Items);
        
         
         currentRoom = room1;

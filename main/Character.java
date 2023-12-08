@@ -1,3 +1,5 @@
+package main;
+
 public class Character extends MysteryMotel {
     private String name;
     public boolean isMurderer;
@@ -8,5 +10,8 @@ public class Character extends MysteryMotel {
     }
     public boolean isMurderer() {
         return isMurderer;
+    }
+    public String getName() {
+    	return name;
     }
 }

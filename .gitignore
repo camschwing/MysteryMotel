@@ -1,5 +1,7 @@
-/main.class
-/Main.class
-/Room.class
-/Item.class
+/.settings
 /.project
+/.classpath
+bin/.DS_Store
+bin/.classpath
+bin/.project
+bin/.settings
