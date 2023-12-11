@@ -14,9 +14,11 @@ public class MysteryMotel {
     static boolean escaped = false;
     static Room room1;
     static Room room2;
+    static Room room3;
     static Room pastRoom;
     static Item key;
     static Item book;
+    static Character motelOwner;
     static ArrayList<Item> inventory = new ArrayList<>();
     static Room currentRoom;
     static Scanner scanner = new Scanner(System.in);
@@ -37,7 +39,6 @@ public class MysteryMotel {
             }
         }
     }
-
 
     static void asciiMessage() throws IOException {
     	Path fileName = Path.of(System.getProperty("user.dir") + "/main/.asciiMessage.txt");
@@ -80,39 +81,37 @@ public class MysteryMotel {
     }
 
     static void processCommand(String command) {
-    	for (int i = 0; i < 50; ++i) System.out.println();
-    
-        switch (command) {
-            case "north":
-            case "east":
-            case "south":
-            case "west":
-                move(command);
-                break;
-            case "search":
-                search();
-                break;
-            case "get":
-                getItem();
-                break;
-            case "use":
-                useItem();
-                break;
-            default:
-                System.out.println("Invalid command. Try again.");
-        }
+        for (int i = 0; i < 50; ++i) System.out.println();
+       
+        pastRoom = currentRoom;
+       
+            switch (command) {
+                case "north":
+                case "east":
+                case "south":
+                case "west":
+                    move(command);
+                    break;
+                case "search":
+                    search();
+                    break;
+                case "get":
+                    getItem();
+                    break;
+                case "use":
+                    useItem();
+                    break;
+                case "yes":
+                    investigateCrimeScene();
+                case "room":
+                	System.out.println(String.format("Current room: %s", currentRoom.getName()));
+                	
+                    break;
+                default:
+                    System.out.println("Invalid command. Try again.");
+            }
     }
 
-    static void move(String direction) {
-        if (direction.equals("north") && currentRoom.equals(room1)) {
-        	enterRoom(room2);
-        if (!investigatedCrimeScene) {
-            investigateCrimeScene();
-        }
-        } else if ("south".equals(direction) && currentRoom.equals(room2)) {
-        	enterRoom(room1);
-}
-    }
 
     static void enterRoom(Room room) {
     	currentRoom = room;
@@ -142,51 +141,69 @@ public class MysteryMotel {
             System.out.println("Your inventory is empty.");
         }
     }
-
-
-    static Character detective;
-    static Character motelOwner;
-    static Character stranger;
+    
+    static void move(String direction) {
+        if (direction.equals("north") && currentRoom.equals(room1)) {
+        enterRoom(room2);
+        System.out.println("Would you like to investigate the crime scene?");
+        } else if ("south".equals(direction) && currentRoom.equals(room2)) {
+        enterRoom(room1);
+        } else if (direction.equals("west") && currentRoom.equals(room1) || currentRoom.equals(room3)) {
+        enterRoom(room3);
+        }
+    }
 
      public static void initializeGame() throws IOException {
     	 asciiMessage();
     	 
-        // Define characters
-        detective = new Character("Detective Smith", false);
-        motelOwner = new Character("Mr. Johnson", false);
-        stranger = new Character("Mysterious Stranger", true);
+    	 Character detective = new Character("Detective Smith", false);
+         Character motelOwner = new Character("Mr. Johnson", false);
+         Character stranger = new Character("Mysterious Stranger", true);
         
-        Item key = new Item("Key", "An old rusty key.");
-        Item book = new Item("Book", "A book with strange symbols.");
+         Item key = new Item("Key", "An old rusty key.");
+         Item book = new Item("Book", "A book with strange symbols.");
+         Item bloodyKnife = new Item("Bloody Knife", "A bloody kitchen knife");
         
         
-        ArrayList<Item> room1Items = new ArrayList<>();
-        room1Items.add(key);
+         ArrayList<Item> room1Items = new ArrayList<>();
+         room1Items.add(key);
 
-        ArrayList<Item> room2Items = new ArrayList<>();
-        room2Items.add(book);
+         ArrayList<Item> room2Items = new ArrayList<>();
+         room2Items.add(book);
+        
+         ArrayList<Item> room3Items = new ArrayList<>();
+         room3Items.add(bloodyKnife);
 
-        // Define items with descriptions
-        Room room1 = new Room("dark room", room1Items);
-        Room room2 = new Room("motel lobby", room2Items);
-       
+         // Define items with descriptions
+         Room room1 = new Room("dark room", room1Items);
+         Room room2 = new Room("motel lobby", room2Items);
+         Room room3 = new Room("Room #23", room3Items);
         
-        currentRoom = room1;
         
-        MysteryMotel.room1 = room1;
-        MysteryMotel.room2 = room2;
+         MysteryMotel.room1 = room1;
+         MysteryMotel.room2 = room2;
+         MysteryMotel.room3 = room3;
+         
+         enterRoom(room1);
     }
 
 
 
-    static void investigateCrimeScene() {
-        System.out.println("Detective Smith asks you to investigate the crime scene.");
-        System.out.println("You find a key and a book. The book has strange symbols that may be a clue.");
-        System.out.println("The motel owner, Mr. Johnson, is acting nervously.");
+     static void investigateCrimeScene() {
+         System.out.println("Detective Smith asks you to investigate the crime scene.");
+         System.out.println("You find a key and a book. The book has strange symbols that may be a clue.");
+         System.out.println("The motel owner, Mr. Johnson, is acting nervously.");
 
-        // Add logic to set investigatedCrimeScene to true and update the story
-        investigatedCrimeScene = true;
-    }
+         investigatedCrimeScene = true;
+        
+         if (inventory.contains(book)) {
+             System.out.println("You remember seeing similar symbols in the book you picked up.");
+             System.out.println("Maybe the book is connected to the crime. Keep it in your inventory for now.");
+         } else {
+             System.out.println("You didn't find the book in the crime scene. It might be in another room.");
+         }
+
+     }
 
     static boolean accused = false;
 
