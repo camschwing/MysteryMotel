@@ -40,7 +40,7 @@ public class MysteryMotel {
 
 
     static void asciiMessage() throws IOException {
-    	Path fileName = Path.of("/Users/jackbeer/Documents/Code/java/MysteryMotel/main/.asciiMessage.txt");
+    	Path fileName = Path.of(System.getProperty("user.dir") + "/main/.asciiMessage.txt");
     	
     	String str = Files.readString(fileName);
     	
@@ -149,9 +149,6 @@ public class MysteryMotel {
     static Character stranger;
 
      public static void initializeGame() throws IOException {
-    	 for (int i = 0; i < 50; ++i) System.out.println();
-    	 
-    	 
     	 asciiMessage();
     	 
         // Define characters
