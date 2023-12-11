@@ -3,9 +3,13 @@
 package main;
 
 import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
-public class MysteryMotel {
+public class MysteryMotel {                                                                                                                           
+
     static boolean investigatedCrimeScene = false;
     static boolean escaped = false;
     static Room room1;
@@ -17,7 +21,8 @@ public class MysteryMotel {
     static Room currentRoom;
     static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+    	
         initializeGame();
         
         while (true) {
@@ -34,6 +39,15 @@ public class MysteryMotel {
     }
 
 
+    static void asciiMessage() throws IOException {
+    	Path fileName = Path.of("/Users/jackbeer/Documents/Code/java/MysteryMotel/main/.asciiMessage.txt");
+    	
+    	String str = Files.readString(fileName);
+    	
+    	System.out.println(str);
+    }
+    
+    
     static void printRoom() {
         ArrayList<Item> items = currentRoom.getItems();
         
@@ -67,9 +81,7 @@ public class MysteryMotel {
 
     static void processCommand(String command) {
     	for (int i = 0; i < 50; ++i) System.out.println();
-    	
-    	pastRoom = currentRoom;
-    	
+    
         switch (command) {
             case "north":
             case "east":
@@ -136,7 +148,12 @@ public class MysteryMotel {
     static Character motelOwner;
     static Character stranger;
 
-     public static void initializeGame() {
+     public static void initializeGame() throws IOException {
+    	 for (int i = 0; i < 50; ++i) System.out.println();
+    	 
+    	 
+    	 asciiMessage();
+    	 
         // Define characters
         detective = new Character("Detective Smith", false);
         motelOwner = new Character("Mr. Johnson", false);
@@ -161,8 +178,6 @@ public class MysteryMotel {
         
         MysteryMotel.room1 = room1;
         MysteryMotel.room2 = room2;
-        
-        for (int i = 0; i < 50; ++i) System.out.println();
     }
 
 
