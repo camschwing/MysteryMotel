@@ -122,17 +122,22 @@ public class MysteryMotel {
                 case "map":
                 	Map.displayMap();
                 	break;
-                case "maprooms":
-                	int c = 0;
-                	for (Map m : Map.mapRooms) {
-                		if (m != null) {
-            			System.out.println("room " + m.getNum() + " : " + c);
+                case "admin", "a":
+                	String aCommand = getUserInput();
+                	switch (aCommand) {
+                	case "maprooms": 
+                		int c = 0;
+                    	for (Map m : Map.mapRooms) {
+                    		if (m != null) {
+                			System.out.println("room " + m.getNum() + " : " + c);
+                    		}
+                    		else {
+                    			System.out.println(m + " : " + c);
+                    		}
+                			c++;
                 		}
-                		else {
-                			System.out.println(m + " : " + c);
-                		}
-            			c++;
-            		}
+                    	break;
+                	}
                 	break;
                 default:
                     System.out.println("Invalid command. Try again.");
