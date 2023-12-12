@@ -1,8 +1,9 @@
 /.settings
 /.project
-/.DS_Store
 /.classpath
+/.DS_Store
 bin/.DS_Store
 bin/.classpath
 bin/.project
 bin/.settings
+/main/

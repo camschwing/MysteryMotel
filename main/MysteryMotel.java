@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class MysteryMotel {                                                                                                                           
-
     static boolean investigatedCrimeScene = false;
     static boolean escaped = false;
     static Room room1;
@@ -22,9 +21,9 @@ public class MysteryMotel {
     static ArrayList<Item> inventory = new ArrayList<>();
     static Room currentRoom;
     static Scanner scanner = new Scanner(System.in);
-
-    public static void main(String[] args) throws IOException {
-    	
+    static Map m;
+  
+    public static void main(String[] args) throws IOException, InterruptedException {
         initializeGame();
         
         while (true) {
@@ -40,6 +39,21 @@ public class MysteryMotel {
         }
     }
 
+    static void intro() throws InterruptedException, IOException {
+    	asciiMessage();
+    	
+    	for(int y = 0; y < 125; y++) {
+    		System.out.print("#");
+    		Thread.sleep(30);
+    	}
+    	
+    	for (int i = 0; i < 50; ++i) System.out.println();
+    }
+    
+    static void map() {
+    	System.out.println(m.displayMap());
+    }
+    
     static void asciiMessage() throws IOException {
     	Path fileName = Path.of(System.getProperty("user.dir") + "/main/.asciiMessage.txt");
     	
@@ -105,8 +119,10 @@ public class MysteryMotel {
                     investigateCrimeScene();
                 case "room":
                 	System.out.println(String.format("Current room: %s", currentRoom.getName()));
-                	
                     break;
+                case "map":
+                	System.out.println(m.displayMap());
+                	break;
                 default:
                     System.out.println("Invalid command. Try again.");
             }
@@ -115,6 +131,7 @@ public class MysteryMotel {
 
     static void enterRoom(Room room) {
     	currentRoom = room;
+    	m.updateRoom(currentRoom.getNum());
 		System.out.println((String.format("You are now in the %s.", currentRoom.getName())));
     }
     
@@ -153,8 +170,12 @@ public class MysteryMotel {
         }
     }
 
-     public static void initializeGame() throws IOException {
-    	 asciiMessage();
+     public static void initializeGame() throws IOException, InterruptedException {
+    	 //intro();
+    	 
+    	 Map m = new Map();
+    	 MysteryMotel.m = m;
+    	 
     	 
     	 Character detective = new Character("Detective Smith", false);
          Character motelOwner = new Character("Mr. Johnson", false);
@@ -175,9 +196,9 @@ public class MysteryMotel {
          room3Items.add(bloodyKnife);
 
          // Define items with descriptions
-         Room room1 = new Room("dark room", room1Items);
-         Room room2 = new Room("motel lobby", room2Items);
-         Room room3 = new Room("Room #23", room3Items);
+         Room room1 = new Room("dark room", 1, room1Items);
+         Room room2 = new Room("motel lobby", 2, room2Items);
+         Room room3 = new Room("Room #23", 3, room3Items);
         
         
          MysteryMotel.room1 = room1;
@@ -233,7 +254,7 @@ public class MysteryMotel {
     static boolean gameOver() {
         return accused || diedInvestigating || escaped;
     }
-
+    
     static void printEndMessage() {
         if (accused) {
             System.out.println("You solved the murder mystery! Congratulations!");
