@@ -137,6 +137,12 @@ public class MysteryMotel {
                 			c++;
                 		}
                     	break;
+                	case "openrooms":
+                		processCommand("north");
+                		processCommand("south");
+                		processCommand("west");
+                		processCommand("map");
+                		break;
                 	}
                 	break;
                 default:
@@ -197,12 +203,12 @@ public class MysteryMotel {
     
     static void move(String direction) {
         if (direction.equals("north") && currentRoom.equals(room1)) {
-        enterRoom(room2, 2, 2, 2);
+        enterRoom(room2, 2, 2, 1);
         System.out.println("Would you like to investigate the crime scene?");
         } else if ("south".equals(direction) && currentRoom.equals(room2)) {
-        enterRoom(room1, 1, 2, 1);
+        enterRoom(room1, 1, 2, 0);
         } else if (direction.equals("west") && currentRoom.equals(room1)) {
-        enterRoom(room3, 3, 1, 1);
+        enterRoom(room3, 3, 1, 0);
         }
     }
 
@@ -237,7 +243,7 @@ public class MysteryMotel {
          MysteryMotel.room2 = room2;
          MysteryMotel.room3 = room3;
          
-         enterRoom(room1, 1, 2, 1);
+         enterRoom(room1, 1, 2, 0);
     }
 
 

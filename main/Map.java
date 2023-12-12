@@ -8,12 +8,16 @@ public class Map extends MysteryMotel {
 	private String strRoom;
 	private String Snum;
 	private Room room;
+	private int id;
 	public static List<Map> mapRooms = new ArrayList<Map>();
 	
 	public Map(int num, Room room, int x, int y) {
 		this.room = room;
 		
+		id = id(x, y);
+		
 		Snum = Integer.toString(num);
+		
 		strRoom = String.format(
 					  "┌───────┐\n"
 					+ "│ROOM %s│\n"
@@ -23,31 +27,61 @@ public class Map extends MysteryMotel {
 		
 		
 		//Add filler spaces in list
-		if (id(x,y)-1 > mapRooms.size() || mapRooms.size() == 0) {
-			for(int i = mapRooms.size(); i < id(x,y); i++) {
-				mapRooms.add(i, null);
-			}
+		if (mapRooms.size() == 0) {
+			mapRooms.add(0, null);
 		}
+		
+		for(int i = mapRooms.size(); i <= id(x,y); i++) {
+			System.out.println("run" + i);
+			mapRooms.add(i, null);
+		}
+		
 		//Add room to mapRooms at index id
 		if (mapRooms.get(id(x,y)-1) == null) {
-		mapRooms.add(id(x,y), this);
+		mapRooms.set(id(x,y), this);
 		}
 	}
 	
 	
+	//Mutator Methods
 	//calculate id, given x and y
 	public static int id(int x, int y) {
-		int id = 0;
-		for (int a = 0; a < y; a++) {
-			id += 3;
-		}
-		id += x;
-		
+		System.out.println(x);
+		System.out.println(y);
+		int id = (3*y) + x;
 		return id;
+	}
+	
+	private StringBuilder directionRoom(Map m) {
+		List<Map> maps = new ArrayList<Map>();
+		
+		maps.addAll(mapRooms);
+		
+		revlist(maps);
+		
+		int roomID = m.getID();
+		
+		StringBuilder printRoom = new StringBuilder(m.getRoom());
+		
+		//South
+		try { Map a = maps.get(roomID-3); if (a != null) { printRoom.setCharAt(44, '┬'); } } catch (Exception e) { };
+		//North
+		try { Map b = maps.get(roomID+3); if (b != null) { printRoom.setCharAt(4, '┴'); } } catch (Exception e) { };
+		//East
+		try { Map c = maps.get(roomID-1); if (c != null) { printRoom.setCharAt(20, '┤'); } } catch (Exception e) { };
+		//West
+		try { Map d = maps.get(roomID+1); if (d != null) { printRoom.setCharAt(28, '├'); } } catch (Exception e) { };
+		
+		maps.clear();
+		
+		return printRoom;
 	}
 	
 	
 	//Accessor methods
+	private int getID() {
+		return id;
+	}
 	private String getRoom() {
 		return strRoom;
 	}
@@ -72,6 +106,7 @@ public class Map extends MysteryMotel {
 	
 	//Display map
 	public static void displayMap() {
+		
 		//Reset map string
 		String map = "";
 		
@@ -82,10 +117,7 @@ public class Map extends MysteryMotel {
 		for (Map m : mapRooms) {
 			//Check if element is not null
 			if(m != null) {
-				//Get mapRoom room string
-				StringBuilder printRoom = new StringBuilder(m.getRoom());
-				//append maproom string to map
-				map = map + printRoom;
+				map = map + m.directionRoom(m);
 			}
 		}
 		System.out.println(map);
