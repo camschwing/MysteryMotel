@@ -3,9 +3,11 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.Format;
 import java.util.Scanner;
 
 public class MysteryMotel {                                                                                                                           
@@ -42,16 +44,13 @@ public class MysteryMotel {
     static void intro() throws InterruptedException, IOException {
     	asciiMessage();
     	
-    	for(int y = 0; y < 125; y++) {
-    		System.out.print("#");
-    		Thread.sleep(30);
+    	Thread.sleep(1700);
+    	for(int y = 0; y < 30; y++) {
+    		System.out.println();
+    		Thread.sleep(175);
     	}
     	
     	for (int i = 0; i < 50; ++i) System.out.println();
-    }
-    
-    static void map() {
-    	System.out.println(m.displayMap());
     }
     
     static void asciiMessage() throws IOException {
@@ -121,19 +120,39 @@ public class MysteryMotel {
                 	System.out.println(String.format("Current room: %s", currentRoom.getName()));
                     break;
                 case "map":
-                	System.out.println(m.displayMap());
+                	Map.displayMap();
                 	break;
                 default:
                     System.out.println("Invalid command. Try again.");
             }
     }
 
-
-    static void enterRoom(Room room) {
+    static void enterRoom(Room room, int num, int x, int y) {
     	currentRoom = room;
-    	m.updateRoom(currentRoom.getNum());
-		System.out.println((String.format("You are now in the %s.", currentRoom.getName())));
+    	
+    	if(Map.mapRooms.size() == 0 || Map.mapRooms.size() < Map.id(x, y)) {
+    		Map map = new Map(num, currentRoom, x, y);
+    		System.out.println(String.format("You are now in : %s", currentRoom));
+    		return;
+    	}
+    	
+    	for (Map m : Map.mapRooms) {
+    		if (m != null) {
+    			if (m.getObjRoom() == currentRoom) {
+    				System.out.println(String.format("You are now in : %s", currentRoom));
+    				return;
+    			}
+    		}
+    	}
+    	
+    	Map map = new Map(num, currentRoom, x, y);
+    	
+    	System.out.println(String.format("You are now in : %s", currentRoom));
     }
+  
+    	
+
+    
     
     static void search() {
         System.out.println("Searching the room...");
@@ -161,21 +180,17 @@ public class MysteryMotel {
     
     static void move(String direction) {
         if (direction.equals("north") && currentRoom.equals(room1)) {
-        enterRoom(room2);
+        enterRoom(room2, 2, 2, 2);
         System.out.println("Would you like to investigate the crime scene?");
         } else if ("south".equals(direction) && currentRoom.equals(room2)) {
-        enterRoom(room1);
-        } else if (direction.equals("west") && currentRoom.equals(room1) || currentRoom.equals(room3)) {
-        enterRoom(room3);
+        enterRoom(room1, 1, 2, 1);
+        } else if (direction.equals("west") && currentRoom.equals(room1)) {
+        enterRoom(room3, 3, 1, 1);
         }
     }
 
      public static void initializeGame() throws IOException, InterruptedException {
     	 //intro();
-    	 
-    	 Map m = new Map();
-    	 MysteryMotel.m = m;
-    	 
     	 
     	 Character detective = new Character("Detective Smith", false);
          Character motelOwner = new Character("Mr. Johnson", false);
@@ -205,7 +220,7 @@ public class MysteryMotel {
          MysteryMotel.room2 = room2;
          MysteryMotel.room3 = room3;
          
-         enterRoom(room1);
+         enterRoom(room1, 1, 2, 1);
     }
 
 
