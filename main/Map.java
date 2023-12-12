@@ -37,15 +37,6 @@ public class Map extends MysteryMotel {
 		mapRooms.add(id(x,y), this);
 		}
 		
-		int c = 0;
-		
-		System.out.println(String.format("%s, %s : %s", x, y, id));
-		
-		for (Map m : mapRooms) {
-			System.out.println(m + " : " + c);
-			c++;
-		}
-		
 		
 		/*
 		int id = id(x, y);
@@ -86,6 +77,11 @@ public class Map extends MysteryMotel {
 	public Room getObjRoom() {
 		return room;
 	}
+	
+	public String getNum() {
+		return Snum;
+	}
+	
 	public static <T> void revlist(List<T> list) {
         if (list.size() <= 1 || list == null)
             return;
@@ -98,7 +94,8 @@ public class Map extends MysteryMotel {
 	
 	public static void displayMap() {
 		String map = "";
-
+		revlist(mapRooms);
+		
 		for (Map m : mapRooms) {
 			if(m != null) {
 				StringBuilder printRoom = new StringBuilder(m.getRoom());
@@ -106,6 +103,6 @@ public class Map extends MysteryMotel {
 			}
 		}
 		System.out.println(map);
-		
+		revlist(mapRooms);
 	}
 }
