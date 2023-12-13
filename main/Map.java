@@ -9,10 +9,12 @@ public class Map extends MysteryMotel {
 	private String Snum;
 	private Room room;
 	private int id;
+	private int x;
 	public static List<Map> mapRooms = new ArrayList<Map>();
 	
 	public Map(int num, Room room, int x, int y) {
 		this.room = room;
+		this.x = x;
 		
 		id = id(x, y);
 		
@@ -32,7 +34,6 @@ public class Map extends MysteryMotel {
 		}
 		
 		for(int i = mapRooms.size(); i <= id(x,y); i++) {
-			System.out.println("run" + i);
 			mapRooms.add(i, null);
 		}
 		
@@ -46,8 +47,6 @@ public class Map extends MysteryMotel {
 	//Mutator Methods
 	//calculate id, given x and y
 	public static int id(int x, int y) {
-		System.out.println(x);
-		System.out.println(y);
 		int id = (3*y) + x;
 		return id;
 	}
@@ -79,6 +78,9 @@ public class Map extends MysteryMotel {
 	
 	
 	//Accessor methods
+	private int getX() {
+		return x;
+	}
 	private int getID() {
 		return id;
 	}
@@ -106,9 +108,19 @@ public class Map extends MysteryMotel {
 	
 	//Display map
 	public static void displayMap() {
+		int minX = 2;
+		StringBuilder printRoom = new StringBuilder();
 		
 		//Reset map string
-		String map = "";
+		String map = "";		
+		
+		for (Map m : mapRooms) {
+			if(m != null) {
+				if (m.getX() < minX) {
+					minX = m.getX();
+				}
+			}
+		}
 		
 		//reverse mapRooms list to print north to south
 		revlist(mapRooms);
@@ -117,7 +129,16 @@ public class Map extends MysteryMotel {
 		for (Map m : mapRooms) {
 			//Check if element is not null
 			if(m != null) {
-				map = map + m.directionRoom(m);
+				printRoom = m.directionRoom(m);
+				
+				if (minX == 1 && m.getX() != 1) {
+					printRoom.replace(0, 0, "          ");
+					printRoom.replace(20, 20, "          ");
+					printRoom.replace(40, 40, "          ");
+					printRoom.replace(60, 60, "          ");
+					printRoom.replace(80, 80, "          ");
+				}
+				map = map + printRoom.toString();
 			}
 		}
 		System.out.println(map);

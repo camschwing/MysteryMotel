@@ -155,14 +155,14 @@ public class MysteryMotel {
     	
     	if(Map.mapRooms.size() == 0 || Map.mapRooms.size() < Map.id(x, y)) {
     		Map map = new Map(num, currentRoom, x, y);
-    		System.out.println(String.format("You are now in : %s", currentRoom));
+    		System.out.println(String.format("You are now in : %s", currentRoom.getName()));
     		return;
     	}
     	
     	for (Map m : Map.mapRooms) {
     		if (m != null) {
     			if (m.getObjRoom() == currentRoom) {
-    				System.out.println(String.format("You are now in : %s", currentRoom));
+    				System.out.println(String.format("You are now in : %s", currentRoom.getName()));
     				return;
     			}
     		}
@@ -170,7 +170,7 @@ public class MysteryMotel {
     	
     	Map map = new Map(num, currentRoom, x, y);
     	
-    	System.out.println(String.format("You are now in : %s", currentRoom));
+    	System.out.println(String.format("You are now in : %s", currentRoom.getName()));
     }
   
     	
