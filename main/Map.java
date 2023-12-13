@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Map extends MysteryMotel {
 
@@ -51,12 +52,12 @@ public class Map extends MysteryMotel {
 		return id;
 	}
 	
-	private StringBuilder directionRoom(Map m) {
+	private static StringBuilder directionRoom(Map m) {
 		List<Map> maps = new ArrayList<Map>();
 		
 		maps.addAll(mapRooms);
 		
-		revlist(maps);
+		//revlist(maps);
 		
 		int roomID = m.getID();
 		
@@ -110,6 +111,7 @@ public class Map extends MysteryMotel {
 	public static void displayMap() {
 		int minX = 2;
 		StringBuilder printRoom = new StringBuilder();
+		List<Integer> printedIDs = new ArrayList<Integer>();
 		
 		//Reset map string
 		String map = "";		
@@ -122,28 +124,55 @@ public class Map extends MysteryMotel {
 			}
 		}
 		
-		//reverse mapRooms list to print north to south
-		revlist(mapRooms);
-		
-		//Loop through every element in mapRooms
 		for (Map m : mapRooms) {
-			//Check if element is not null
-			if(m != null) {
-				printRoom = m.directionRoom(m);
+			if(m != null && !printedIDs.contains(m.getID())) {
+				
+				printRoom = directionRoom(m);
+				
+				try { Map d = mapRooms.get(m.getID()+1); if (d != null) { 
+					String finalRoom = "";
+					
+					Scanner r1 = new Scanner(printRoom.toString());
+					Scanner r2 = new Scanner(directionRoom(d).toString());
+					
+					while (r1.hasNextLine()) {
+						  String line = r1.nextLine();
+						  String line2 = r2.nextLine();
+						  
+						  finalRoom = finalRoom + line + line2 + "\n";
+					}
+					map = map + finalRoom;
+					printedIDs.add(m.getID());
+					printedIDs.add(m.getID()+1);
+					r1.close();
+					r2.close(); 
+					continue;
+					} } catch (Exception e) { };
+				
+				try { Map a = mapRooms.get(m.getID()-3); if (a != null) { 
+					String finalRoom = "";
+					Scanner r1 = new Scanner(printRoom.toString());
+					
+					if (minX == 1 && m.getX() != 1) {
+						while (r1.hasNextLine()) {
+							String line = r1.nextLine();
+							finalRoom = finalRoom + "         " + line + "\n";
+						}
+					}
+					map = finalRoom + map;
+					printedIDs.add(m.getID());
+					r1.close();
+					continue;
+				} } catch (Exception e) { };
 				
 				if (minX == 1 && m.getX() != 1) {
-					printRoom.replace(0, 0, "          ");
-					printRoom.replace(20, 20, "          ");
-					printRoom.replace(40, 40, "          ");
-					printRoom.replace(60, 60, "          ");
-					printRoom.replace(80, 80, "          ");
+					
 				}
 				map = map + printRoom.toString();
+				printedIDs.add(m.getID());
 			}
 		}
 		System.out.println(map);
-		
-		//Reverse mapRooms list south to north to add elements
-		revlist(mapRooms);
+		printedIDs.clear();
 	}
 }
