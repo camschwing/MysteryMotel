@@ -6,4 +6,6 @@ bin/.DS_Store
 bin/.classpath
 bin/.project
 bin/.settings
+/test/
+/doc/
 /main/
