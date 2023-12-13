@@ -1,6 +1,6 @@
 package main;
 
-public class Character extends MysteryMotel {
+public class Character {
     private String name;
     public boolean isMurderer;
 

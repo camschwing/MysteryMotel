@@ -1,6 +1,6 @@
 package main;
 
-public class Item extends MysteryMotel {
+public class Item {
     public String name;
     public String description;
 

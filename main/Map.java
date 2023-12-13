@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Map extends MysteryMotel {
+public class Map {
 
 	private String strRoom;
 	private String Snum;
@@ -12,15 +12,14 @@ public class Map extends MysteryMotel {
 	private int id;
 	private int x;
 	private int y;
-	public static List<Map> mapRooms = new ArrayList<Map>();
+	private static List<Map> mapRooms = new ArrayList<Map>();
 	public static List<Map> printedRooms = new ArrayList<Map>();
 	
 	public Map(int num, Room room, int x, int y) {
 		this.room = room;
 		this.x = x;
 		this.y = y;
-		
-		id = id(x, y);
+		this.id = id(x, y);
 		
 		Snum = Integer.toString(num);
 		
@@ -37,20 +36,24 @@ public class Map extends MysteryMotel {
 			mapRooms.add(0, null);
 		}
 		
-		for(int i = mapRooms.size(); i <= id(x,y); i++) {
+		for(int i = mapRooms.size(); i <= id; i++) {
 			mapRooms.add(i, null);
 		}
 		
 		//Add room to mapRooms at index id
-		if (mapRooms.get(id(x,y)-1) == null) {
-		mapRooms.set(id(x,y), this);
+		
+		if (mapRooms.get(id-1) == null) {
+		mapRooms.set(id, this);
 		}
 	}
 	
+	public Map() {}
+
+	public static List<Map> getMapRooms() {
+		return mapRooms;
+	}
 	
-	//Mutator Methods
-	//calculate id, given x and y
-	public static int id(int x, int y) {
+	public int id(int x, int y) {
 		int id = (3*y) + x;
 		return id;
 	}
@@ -81,14 +84,14 @@ public class Map extends MysteryMotel {
 		this.x = x;
 	}
 	//Accessor methods
+	public int getID() {
+		return id;
+	}
 	private int getX() {
 		return x;
 	}
 	private int getY() {
 		return y;
-	}
-	private int getID() {
-		return id;
 	}
 	private String getRoom() {
 		return strRoom;
@@ -107,6 +110,14 @@ public class Map extends MysteryMotel {
 	}
 	public Room getObjRoom() {
 		return room;
+	}
+	public static int getRoomNum(int id) {
+		for (Room r : Room.getRooms()) {
+			if (r.getID() == id ) {
+				return r.getNum();
+			}
+		}
+		return 0;
 	}
 	public String getNum() {
 		return Snum;
@@ -246,7 +257,7 @@ public class Map extends MysteryMotel {
 		
 		printedRooms.clear();
 		
-		Map startRoom = m;
+		Map startRoom = new Map();
 		String map = "";	
 		
 		//Find first room
