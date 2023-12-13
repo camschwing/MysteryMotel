@@ -11,11 +11,14 @@ public class Map extends MysteryMotel {
 	private Room room;
 	private int id;
 	private int x;
+	private int y;
 	public static List<Map> mapRooms = new ArrayList<Map>();
+	public static List<Map> printedRooms = new ArrayList<Map>();
 	
 	public Map(int num, Room room, int x, int y) {
 		this.room = room;
 		this.x = x;
+		this.y = y;
 		
 		id = id(x, y);
 		
@@ -57,8 +60,6 @@ public class Map extends MysteryMotel {
 		
 		maps.addAll(mapRooms);
 		
-		//revlist(maps);
-		
 		int roomID = m.getID();
 		
 		StringBuilder printRoom = new StringBuilder(m.getRoom());
@@ -73,14 +74,18 @@ public class Map extends MysteryMotel {
 		try { Map d = maps.get(roomID+1); if (d != null) { printRoom.setCharAt(28, '├'); } } catch (Exception e) { };
 		
 		maps.clear();
-		
 		return printRoom;
 	}
 	
-	
+	public void setX(int x) {
+		this.x = x;
+	}
 	//Accessor methods
 	private int getX() {
 		return x;
+	}
+	private int getY() {
+		return y;
 	}
 	private int getID() {
 		return id;
@@ -88,13 +93,119 @@ public class Map extends MysteryMotel {
 	private String getRoom() {
 		return strRoom;
 	}
+	
+	private static List<Map> getSurrounding(Map m) {
+		List<Map> surRooms = new ArrayList<Map>();
+		int roomID = m.getID();
+		
+		try { Map a = mapRooms.get(roomID-3); if (a != null) { surRooms.add(a); } } catch (Exception e) { };
+		try { Map a = mapRooms.get(roomID+3); if (a != null) { surRooms.add(a); } } catch (Exception e) { };
+		try { Map a = mapRooms.get(roomID-1); if (a != null) { surRooms.add(a); } } catch (Exception e) { };
+		try { Map a = mapRooms.get(roomID+1); if (a != null) { surRooms.add(a); } } catch (Exception e) { };
+		
+		return surRooms;
+	}
 	public Room getObjRoom() {
 		return room;
 	}
 	public String getNum() {
 		return Snum;
 	}
+	private static Map getMap(int id) {
+		for (Map m : mapRooms) {
+			if (m != null) {
+				if (m.getID() == id) {
+					return m;
+				}
+			}
+		}
+		return null;
+	}
 	
+	private static String mapSurRooms(Map m, String map) {
+		List<Map> surRooms = getSurrounding(m);
+		
+		if(surRooms.size() == 0) {
+			map = map + m.getRoom();
+			return map;
+		}
+		
+		if (surRooms.size() > 0) {
+			int sX = m.getX();
+			int sY = m.getY();
+			
+			for (Map d : surRooms) {
+				if (printedRooms.contains(d)) {
+					continue;
+				}
+				
+				int mX = d.getX();
+				int mY = d.getY();
+				
+				//West
+				if(mX < sX) {
+					Map m2 = getMap(m.getID()-1);
+					String finalRoom = westRoom(m2);
+					map = map + finalRoom;
+					printedRooms.add(m);
+					continue;
+				}
+				//East
+				if(mX > sX) {
+					String finalRoom = westRoom(m);
+					map = map + finalRoom;
+					printedRooms.add(m);
+					continue;
+				}
+				//South
+				if(mY < sY) {
+					map = map + directionRoom(d);
+				}
+				//North
+				if(mY > sY) {
+					map = directionRoom(d) + map;
+				}
+				printedRooms.add(d);
+			}
+		}
+		
+		if (!printedRooms.contains(m) && getSurrounding(m).size() != 0) {
+			int sX = m.getX();
+			
+			for (Map a : getSurrounding(m)) {
+				int aX = a.getX();
+				
+				if (sX == aX) {
+					map =  map + directionRoom(m).toString();
+				}
+				if (sX < aX) {
+					map = indentRoom(sX, aX, m) + map;
+				}
+			}
+		}
+		else if (!printedRooms.contains(m) && getSurrounding(m).size() == 0) {
+			
+			map = map + directionRoom(m).toString();
+		}
+		printedRooms.add(m);
+		return map;
+	}
+	
+	public static String indentRoom(int sX, int mX, Map m) {
+		String finalRoom = directionRoom(m).toString();
+		
+		if (sX < mX) {
+			finalRoom = "";
+			Scanner r1 = new Scanner(directionRoom(m).toString());
+			while (r1.hasNextLine()) {
+				  String line = r1.nextLine();
+				  
+				  finalRoom = finalRoom + "         " + line + "\n";
+			}
+		}
+		m.setX(m.getX()+1);
+		return finalRoom;
+	}
 	
 	//Reverse given list
 	public static <T> void revlist(List<T> list) {
@@ -106,73 +217,79 @@ public class Map extends MysteryMotel {
         list.add(value);
     }
 	
+	public static String westRoom(Map m1) {
+		String finalRoom = "";
+		try { Map d = mapRooms.get(m1.getID()+1); if (d != null) { 
+			Scanner r1 = new Scanner(directionRoom(m1).toString());
+			Scanner r2 = new Scanner(directionRoom(d).toString());
+			
+			while (r1.hasNextLine()) {
+				  String line = r1.nextLine();
+				  String line2 = r2.nextLine();
+				  
+				  finalRoom = finalRoom + line + line2 + "\n";
+			}
+			printedRooms.add(m1);
+			printedRooms.add(d);
+			d.setX(d.getX()+1);
+			r1.close();
+			r2.close(); 
+			} } catch (Exception e) { };
+		return finalRoom;
+	}
+	
 	
 	//Display map
 	public static void displayMap() {
-		int minX = 2;
-		StringBuilder printRoom = new StringBuilder();
-		List<Integer> printedIDs = new ArrayList<Integer>();
+		List<Map> surRooms = new ArrayList<Map>();
+		List<Map> newSurRooms = new ArrayList<Map>();
 		
-		//Reset map string
-		String map = "";		
+		printedRooms.clear();
 		
+		Map startRoom = m;
+		String map = "";	
+		
+		//Find first room
 		for (Map m : mapRooms) {
 			if(m != null) {
-				if (m.getX() < minX) {
-					minX = m.getX();
-				}
+				startRoom = m;
+				surRooms = getSurrounding(startRoom);
+				break;
 			}
 		}
 		
-		for (Map m : mapRooms) {
-			if(m != null && !printedIDs.contains(m.getID())) {
+		//Update map to sur of first room
+		map = mapSurRooms(startRoom, map);
+		printedRooms.add(startRoom);
+		
+		//While there are surrounding rooms
+		while (surRooms.size() != 0) {
+			
+			//Loop through surrounding rooms
+			for(Map m : surRooms) {
 				
-				printRoom = directionRoom(m);
-				
-				try { Map d = mapRooms.get(m.getID()+1); if (d != null) { 
-					String finalRoom = "";
-					
-					Scanner r1 = new Scanner(printRoom.toString());
-					Scanner r2 = new Scanner(directionRoom(d).toString());
-					
-					while (r1.hasNextLine()) {
-						  String line = r1.nextLine();
-						  String line2 = r2.nextLine();
-						  
-						  finalRoom = finalRoom + line + line2 + "\n";
-					}
-					map = map + finalRoom;
-					printedIDs.add(m.getID());
-					printedIDs.add(m.getID()+1);
-					r1.close();
-					r2.close(); 
-					continue;
-					} } catch (Exception e) { };
-				
-				try { Map a = mapRooms.get(m.getID()-3); if (a != null) { 
-					String finalRoom = "";
-					Scanner r1 = new Scanner(printRoom.toString());
-					
-					if (minX == 1 && m.getX() != 1) {
-						while (r1.hasNextLine()) {
-							String line = r1.nextLine();
-							finalRoom = finalRoom + "         " + line + "\n";
-						}
-					}
-					map = finalRoom + map;
-					printedIDs.add(m.getID());
-					r1.close();
-					continue;
-				} } catch (Exception e) { };
-				
-				if (minX == 1 && m.getX() != 1) {
-					
+				if(!printedRooms.contains(m)) {
+					map = mapSurRooms(m, map);
 				}
-				map = map + printRoom.toString();
-				printedIDs.add(m.getID());
+				
+				//Loop through surrounding rooms of the surround room
+				for(Map d : getSurrounding(m)) {
+					
+					//Check if room has already been printed
+					if (!printedRooms.contains(d)) {
+						
+						//add new room to surrounding room list
+						newSurRooms.add(d);
+					}
+				}
 			}
+			//add new surrounding rooms
+			surRooms.addAll(newSurRooms);
+			//remove any rooms that were already printed
+			surRooms.removeAll(printedRooms);
 		}
+		
 		System.out.println(map);
-		printedIDs.clear();
 	}
+	
 }
