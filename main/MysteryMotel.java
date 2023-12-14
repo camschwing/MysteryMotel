@@ -41,7 +41,7 @@ public class MysteryMotel {
     
     //Interface Methods
     public static void initializeGame() throws IOException, InterruptedException {
-   	 	//intro();
+   	 	intro();
    	 	
         // Define rooms
     	new Map(0, 0);
