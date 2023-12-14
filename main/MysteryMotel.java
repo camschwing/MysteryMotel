@@ -17,6 +17,7 @@ public class MysteryMotel {
 	protected static Item book;
 	protected static boolean diedInvestigating = false;
 	protected static boolean entered = false;
+	protected static int yIndex;
 	
     private static boolean escaped = false;
     private static Scanner scanner = new Scanner(System.in);
@@ -43,9 +44,11 @@ public class MysteryMotel {
    	 	//intro();
    	 	
         // Define rooms
+    	new Map(0, 0);
         new Room(1, "dark room", new Item("Key", "An old rusty key."), 2, 0);
         new Room(2, "motel lobby", new Item("Book", "A book with strange symbols."), 2, 1);
         new Room(3, "Room #23", new Item("Bloody Knife", "A bloody kitchen knife"), 1, 0);
+        new Room(4, "test Room", new Item("Bloody Knife", "A bloody kitchen knife"), 3, 0);
        
         Commands.enterRoom(1);
    }

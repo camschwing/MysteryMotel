@@ -7,9 +7,7 @@ class Commands extends MysteryMotel {
 	
 	static boolean admin = false;
 	 
-	public Commands() {
-		
-	}
+	public Commands() {}
 	
 	public static void processCommand(String command) {
         for (int i = 0; i < 50; ++i) System.out.println();
