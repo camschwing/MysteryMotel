@@ -44,7 +44,7 @@ public class MysteryMotel {
    	 	intro();
    	 	
         // Define rooms
-    	new Map(0, 0);
+    	new Map();
         new Room(1, "dark room", new Item("Key", "An old rusty key."), 2, 0);
         new Room(2, "motel lobby", new Item("Book", "A book with strange symbols."), 2, 1);
         new Room(3, "Room #23", new Item("Bloody Knife", "A bloody kitchen knife"), 1, 0);
