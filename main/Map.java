@@ -80,9 +80,10 @@ public class Map {
 		return null;
 	}
 	
-	private static String directionRoom(Map m) {
+	private static String updateRoom(Map m) {
 		ArrayList<Integer> listID = new ArrayList<Integer>();
 		StringBuilder printRoom = new StringBuilder(m.getRoom());
+		int cID = MysteryMotel.getCurrentRoom().getID();
 		int i = m.getID();
 		int tot;
 		
@@ -92,8 +93,9 @@ public class Map {
 		} 
 		Collections.sort(listID, Collections.reverseOrder()); 
 		
+		if (cID == i) {printRoom.setCharAt(34, '*');}
 		if (listID.contains(i-3)) {printRoom.setCharAt(44, '┬');}
-		if (listID.contains(i+3)) {printRoom.setCharAt(4, '┴');}
+		if (listID.contains(i+3)) {printRoom.setCharAt(04, '┴');}
 		if (listID.contains(i-1)) {printRoom.setCharAt(20, '┤');}
 		if (listID.contains(i+1)) {printRoom.setCharAt(28, '├');}
 		
@@ -149,7 +151,7 @@ public class Map {
 			
 			for (int x = minX; x <= maxX; x++) {
 				int id = id(x, y);
-				try {yString = conjoin(yString, directionRoom(getMap(id)).toString());} 
+				try {yString = conjoin(yString, updateRoom(getMap(id)).toString());} 
 				catch(Exception e) {yString = conjoin(yString, getMap(0).getRoom());} 
 			}
 			System.out.println(yString);

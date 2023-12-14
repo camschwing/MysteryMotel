@@ -73,10 +73,8 @@ public class MysteryMotel {
     }
    
     private static void printRoom() {
-    	if (entered == true) {
-    		entered = false;
-    		return;
-    	}
+    	if (entered == true) {entered = false;}
+    	return;
     }
     
     public static String getUserInput() {
