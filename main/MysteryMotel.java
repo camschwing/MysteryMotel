@@ -1,5 +1,4 @@
 //JACK AND CAM
-
 package main;
 
 import java.util.ArrayList;
@@ -11,17 +10,16 @@ import java.util.Scanner;
 public class MysteryMotel {       
 	protected static ArrayList<Item> inventory = new ArrayList<>();
 	protected static boolean investigatedCrimeScene = false;
+    protected static boolean diedInvestigating = false;
 	protected static boolean accused = false;
-    protected static Character motelOwner;
-	protected static Room currentRoom;
+    protected static boolean entered = false;
+    protected static Room currentRoom;
 	protected static Item book;
-	protected static boolean diedInvestigating = false;
-	protected static boolean entered = false;
 	protected static int yIndex;
 	
-    private static boolean escaped = false;
-    private static Scanner scanner = new Scanner(System.in);
-    
+    private static final boolean escaped = false;
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws IOException, InterruptedException {
         initializeGame();
         
@@ -38,17 +36,13 @@ public class MysteryMotel {
         }
     }
 
-    
-    //Interface Methods
     public static void initializeGame() throws IOException, InterruptedException {
    	 	intro();
-   	 	
-        // Define rooms
+
     	new Map();
         new Room(1, "dark room", new Item("Key", "An old rusty key."), 2, 0);
         new Room(2, "motel lobby", new Item("Book", "A book with strange symbols."), 2, 1);
         new Room(3, "Room #23", new Item("Bloody Knife", "A bloody kitchen knife"), 1, 0);
-        new Room(4, "test Room", new Item("Bloody Knife", "A bloody kitchen knife"), 3, 0);
        
         Commands.enterRoom(1);
    }
@@ -61,7 +55,6 @@ public class MysteryMotel {
     		System.out.println();
     		Thread.sleep(175);
     	}
-    	
     }
    
     private static void asciiMessage() throws IOException {
@@ -73,10 +66,9 @@ public class MysteryMotel {
     }
    
     private static void printRoom() {
-    	if (entered == true) {entered = false;}
-    	return;
+    	if (entered) {entered = false;}
     }
-    
+
     public static String getUserInput() {
         System.out.print("Enter command: ");
         return scanner.nextLine().toLowerCase();

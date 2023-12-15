@@ -3,13 +3,13 @@ package main;
 import java.util.ArrayList;
 
 public class Room {
-    private static ArrayList<Room> rooms = new ArrayList<>();
-    private ArrayList<Item> items;
-    private String name;
-    private int roomNum;
-    private int roomID;
-    private int x;
-    private int y;
+    private static final ArrayList<Room> rooms = new ArrayList<>();
+    private final ArrayList<Item> items;
+    private final String name;
+    private final int roomNum;
+    private final int roomID;
+    private final int x;
+    private final int y;
     
     public Room(int roomNum, String name, Item item, int x, int y) {
     	items = new ArrayList<>();
@@ -24,8 +24,7 @@ public class Room {
     }
     
     public int id(int x, int y) {
-		int id = (3*y) + x;
-		return id;
+		return (3*y) + x;
 	}
     
     public String getName() {

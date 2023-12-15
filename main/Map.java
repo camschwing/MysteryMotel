@@ -1,59 +1,53 @@
 package main;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+
+import java.util.*;
 
 public class Map {
-	private String strRoom;
-	private int id;
+	private final String strRoom;
+	private final int id;
 	private int x;
 	private int y;
-	private int num;
-	private Room room;
-	private static ArrayList<ArrayList<Integer>> xy = new ArrayList<ArrayList<Integer>>();
-	private static List<Map> mapRooms = new ArrayList<Map>();
-	
-	int yIndex = MysteryMotel.yIndex;
-	
+    private Room room;
+	private static final ArrayList<ArrayList<Integer>> xy = new ArrayList<>();
+	private static final List<Map> mapRooms = new ArrayList<>();
+
 	public Map(int num, Room room, int x, int y) {
 		this.id = id(x, y);
 		this.x = x;
 		this.y = y;
-		this.num = num;
-		this.room = room;
+        this.room = room;
 		strRoom = String.format(
-					  "┌───────┐\n"
-					+ "│ROOM %s│\n"
-					+ "│       │\n"
-					+ "│       │\n"
-					+ "└───────┘\n", "0"+num);
+                """
+                        ┌───────┐
+                        │ROOM %s│
+                        │       │
+                        │       │
+                        └───────┘
+                        """, "0"+num);
 		
-		xy.add(new ArrayList<Integer>(Arrays.asList(x, y)));
+		xy.add(new ArrayList<>(Arrays.asList(x, y)));
 		MysteryMotel.yIndex += 2;
 		mapRooms.add(this);
 	}
 	
 	public Map() {
 		this.id = 0;
-		strRoom = String.format(
-				  "         \n"
-				+ "         \n"
-				+ "         \n"
-				+ "         \n"
-				+ "         \n");
+		strRoom = """
+                        \s
+                        \s
+                        \s
+                        \s
+                        \s
+                """;
 		
-		mapRooms.add(0, this);
+		mapRooms.addFirst(this);
 	}
 
 	public static int id(int x, int y) {
-		int id = (3*y) + x;
-		return id;
+        return (3*y) + x;
 	}
 	
 	public static List<Map> getMapRooms() { return mapRooms; }
-	public String getNum() { return Integer.toString(num); }
 	private String getRoom() { return strRoom; }
 	public Room getObjRoom() { return room; }
 	public int getID() { return id; }
@@ -81,7 +75,7 @@ public class Map {
 	}
 	
 	private static String updateRoom(Map m) {
-		ArrayList<Integer> listID = new ArrayList<Integer>();
+		ArrayList<Integer> listID = new ArrayList<>();
 		StringBuilder printRoom = new StringBuilder(m.getRoom());
 		int cID = MysteryMotel.getCurrentRoom().getID();
 		int i = m.getID();
@@ -91,11 +85,11 @@ public class Map {
 			tot = id(b.get(0), b.get(1));
 			listID.add(tot);
 		} 
-		Collections.sort(listID, Collections.reverseOrder()); 
+		listID.sort(Collections.reverseOrder());
 		
 		if (cID == i) {printRoom.setCharAt(34, '*');}
 		if (listID.contains(i-3)) {printRoom.setCharAt(44, '┬');}
-		if (listID.contains(i+3)) {printRoom.setCharAt(04, '┴');}
+		if (listID.contains(i+3)) {printRoom.setCharAt(4, '┴');}
 		if (listID.contains(i-1)) {printRoom.setCharAt(20, '┤');}
 		if (listID.contains(i+1)) {printRoom.setCharAt(28, '├');}
 		
@@ -103,29 +97,29 @@ public class Map {
 	}
 	
 	private static String conjoin(String s1, String s2) {
-		String finalRoom = "";
-		Scanner r1 = new Scanner(s1.toString());
-		Scanner r2 = new Scanner(s2.toString());
+		StringBuilder finalRoom = new StringBuilder();
+		Scanner r1 = new Scanner(s1);
+		Scanner r2 = new Scanner(s2);
 		
 		while (r1.hasNextLine()) {
 			  String line = r1.nextLine();
 			  String line2 = r2.nextLine();
-			  finalRoom = finalRoom + line + line2 + "\n";
+			  finalRoom.append(line).append(line2).append("\n");
 		}
 		
-		return finalRoom.replaceAll("[\n\r]$", "");
+		return finalRoom.toString().replaceAll("[\n\r]$", "");
 	}
 	
-	private static ArrayList<Map> sortArray(ArrayList<ArrayList<Integer>> a) {
-		ArrayList<Integer> listID = new ArrayList<Integer>();
-		ArrayList<Map> listRoom = new ArrayList<Map>();
+	private static ArrayList<Map> sortArray() {
+		ArrayList<Integer> listID = new ArrayList<>();
+		ArrayList<Map> listRoom = new ArrayList<>();
 		int tot;
 		
-		for (ArrayList<Integer> b : a) {
+		for (ArrayList<Integer> b : Map.xy) {
 			tot = id(b.get(0), b.get(1));
 			listID.add(tot);
 		}
-		Collections.sort(listID, Collections.reverseOrder()); 
+		listID.sort(Collections.reverseOrder());
 		
 		for (int i : listID) {listRoom.add(getMap(i));}
 		
@@ -133,7 +127,7 @@ public class Map {
 	}
 	
 	public static void displayMap() {
-		ArrayList<Map> listRoom = sortArray(xy);
+		ArrayList<Map> listRoom = sortArray();
 		int minX = 100;
 		int minY = 100;
 		int maxX = 0;
@@ -147,12 +141,17 @@ public class Map {
 		}
 		
 		for (int y = maxY; y >= minY; y--) {
-			String yString = "\n" + "\n" + "\n" + "\n" + "\n";
-			
+			String yString = """
+
+
+
+
+
+                    """;
 			for (int x = minX; x <= maxX; x++) {
 				int id = id(x, y);
-				try {yString = conjoin(yString, updateRoom(getMap(id)).toString());} 
-				catch(Exception e) {yString = conjoin(yString, getMap(0).getRoom());} 
+				try {yString = conjoin(yString, updateRoom(Objects.requireNonNull(getMap(id))));}
+				catch(Exception e) {yString = conjoin(yString, Objects.requireNonNull(getMap(0)).getRoom());}
 			}
 			System.out.println(yString);
 		}
