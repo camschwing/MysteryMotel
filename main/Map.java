@@ -3,13 +3,23 @@ package main;
 import java.util.*;
 
 public class Map {
+	private static final String miniRoom = """
+			┌───┐
+			│   │
+			└───┘
+			""";
+	private static final String miniEmptyRoom = """
+                    \s
+                    \s
+                    \s
+                """;
+	private static final ArrayList<ArrayList<Integer>> xy = new ArrayList<>();
+	private static final List<Map> mapRooms = new ArrayList<>();
 	private final String strRoom;
+	private Room room;
 	private final int id;
 	private int x;
 	private int y;
-    private Room room;
-	private static final ArrayList<ArrayList<Integer>> xy = new ArrayList<>();
-	private static final List<Map> mapRooms = new ArrayList<>();
 
 	public Map(int num, Room room, int x, int y) {
 		this.id = id(x, y);
@@ -95,18 +105,40 @@ public class Map {
 		
 		return printRoom.toString();
 	}
-	
+
+	private static String updateMiniRoom(Map m) {
+		ArrayList<Integer> listID = new ArrayList<>();
+		StringBuilder printRoom = new StringBuilder(miniRoom);
+		int cID = MysteryMotel.getCurrentRoom().getID();
+		int i = m.getID();
+		int tot;
+
+		for (ArrayList<Integer> b : xy) {
+			tot = id(b.get(0), b.get(1));
+			listID.add(tot);
+		}
+		listID.sort(Collections.reverseOrder());
+
+		if (cID == i) {printRoom.setCharAt(8, '*');}
+		if (listID.contains(i-3)) {printRoom.setCharAt(14, '┬');}
+		if (listID.contains(i+3)) {printRoom.setCharAt(2, '┴');}
+		if (listID.contains(i-1)) {printRoom.setCharAt(6, '┤');}
+		if (listID.contains(i+1)) {printRoom.setCharAt(10, '├');}
+
+		return printRoom.toString();
+	}
+
 	private static String conjoin(String s1, String s2) {
 		StringBuilder finalRoom = new StringBuilder();
 		Scanner r1 = new Scanner(s1);
 		Scanner r2 = new Scanner(s2);
-		
+
 		while (r1.hasNextLine()) {
-			  String line = r1.nextLine();
-			  String line2 = r2.nextLine();
-			  finalRoom.append(line).append(line2).append("\n");
+			String line = r1.nextLine();
+			String line2 = r2.nextLine();
+			finalRoom.append(line).append(line2).append("\n");
 		}
-		
+
 		return finalRoom.toString().replaceAll("[\n\r]$", "");
 	}
 	
@@ -155,5 +187,36 @@ public class Map {
 			}
 			System.out.println(yString);
 		}
+	}
+
+	public static String displayMiniMap() {
+		ArrayList<Map> listRoom = sortArray();
+		StringBuilder finalMap = new StringBuilder();
+		int minX = 100;
+		int minY = 100;
+		int maxX = 0;
+		int maxY = 0;
+
+		for (Map m : listRoom) {
+			if (m.getX() < minX && m.getID() != 0) {minX = m.getX();}
+			if (m.getY() < minY && m.getID() != 0) {minY = m.getY();}
+			if (m.getX() > maxX) {maxX = m.getX();}
+			if (m.getY() > maxY) {maxY = m.getY();}
+		}
+
+		for (int y = maxY; y >= minY; y--) {
+			String yString = """
+
+ 
+ 
+                    """;
+			for (int x = minX; x <= maxX; x++) {
+				int id = id(x, y);
+				try {yString = conjoin(yString, updateMiniRoom(Objects.requireNonNull(getMap(id))));}
+				catch(Exception e) {yString = conjoin(yString, miniEmptyRoom);}
+			}
+			finalMap.append(yString).append("\n");
+		}
+		return finalMap.deleteCharAt(finalMap.length()-1).toString();
 	}
 }

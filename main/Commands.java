@@ -9,12 +9,17 @@ class Commands extends MysteryMotel {
 
 	public static void processCommand(String command) {
 		for (int i = 0; i < 50; ++i)  System.out.println();
+
 		switch (command) {
 			case "north":
 			case "east":
 			case "south":
 			case "west":
 				move(command);
+				break;
+
+			case "gui":
+				Gui.displayGui();
 				break;
 
 			case "search":
@@ -38,6 +43,10 @@ class Commands extends MysteryMotel {
 
 			case "map":
 				Map.displayMap();
+				break;
+
+			case "minimap":
+				Map.displayMiniMap();
 				break;
 
 			case "admin", "a":
@@ -99,7 +108,7 @@ class Commands extends MysteryMotel {
 
     	if(mapRooms.isEmpty() || mapRooms.size() < id) {
     		new Map(num, currentRoom, x, y);
-    		System.out.println(String.format("You entered the %s", currentRoom.getName()) + ".");
+    		System.out.println(String.format("* You entered the %s", currentRoom.getName()) + ".");
     		entered = true;
     		return;
     	}
@@ -107,7 +116,7 @@ class Commands extends MysteryMotel {
     	for (Map m : mapRooms) {
     		if (m != null) {
     			if (m.getObjRoom() == currentRoom) {
-    				System.out.println(String.format("You entered the %s", currentRoom.getName()) + ".");
+    				System.out.println(String.format("* You entered the %s", currentRoom.getName()) + ".");
     				entered = true;
     				return;
     			}
@@ -115,7 +124,7 @@ class Commands extends MysteryMotel {
     	}
     	entered = true;
     	new Map(num, currentRoom, x, y);
-    	System.out.println(String.format("You entered the %s", currentRoom.getName()) + ".");
+    	System.out.println(String.format("* You entered the %s", currentRoom.getName()) + ".");
     }
 	protected static void search() {
         System.out.println("Searching the room...");

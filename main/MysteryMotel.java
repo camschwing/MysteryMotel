@@ -36,7 +36,7 @@ public class MysteryMotel {
         }
     }
 
-    public static void initializeGame() throws IOException, InterruptedException {
+    public static void initializeGame() throws IOException {
    	 	intro();
 
     	new Map();
@@ -47,14 +47,16 @@ public class MysteryMotel {
         Commands.enterRoom(1);
    }
     
-    private static void intro() throws InterruptedException, IOException {
+    private static void intro() throws IOException {
     	asciiMessage();
-    	
+
+        /*
     	Thread.sleep(1700);
     	for(int y = 0; y < 38; y++) {
     		System.out.println();
     		Thread.sleep(175);
     	}
+        */
     }
    
     private static void asciiMessage() throws IOException {
@@ -67,6 +69,7 @@ public class MysteryMotel {
    
     private static void printRoom() {
     	if (entered) {entered = false;}
+        //Gui.displayGui();
     }
 
     public static String getUserInput() {
