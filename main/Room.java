@@ -10,6 +10,7 @@ public class Room {
     private final int roomID;
     private final int x;
     private final int y;
+    private boolean searched = false;
     
     public Room(int roomNum, String name, Item item, int x, int y) {
     	items = new ArrayList<>();
@@ -17,16 +18,30 @@ public class Room {
         this.roomNum = roomNum;
         this.x = x;
         this.y = y;
-        roomID = id(x, y);
+        roomID = Commands.id(x, y);
         
         items.add(item);
         rooms.add(this);
     }
+    public Room(int roomNum, String name, ArrayList<Item> item, int x, int y) {
+        items = new ArrayList<>();
+        this.name = name;
+        this.roomNum = roomNum;
+        this.x = x;
+        this.y = y;
+        roomID = Commands.id(x, y);
+
+        items.addAll(item);
+        rooms.add(this);
+    }
     
-    public int id(int x, int y) {
-		return (3*y) + x;
-	}
-    
+    public void setSearched() {
+        this.searched = true;
+    }
+    public void removeItem(Item a) {
+        items.removeIf(i -> i == a);
+    }
+
     public String getName() {
         return name;
     }
@@ -42,18 +57,19 @@ public class Room {
     public int getY() {
     	return y;
     }
+    public boolean getSearched() { return searched; }
     public ArrayList<Item> getItems() {
         return items;
     }
-    public static Room getRoom(int num) {
-    	for (Room r : rooms) {
-    		if(r.getNum() == num) {
-    			return r;
-    		}
-    	}
-    	return null;
-    }
     public static ArrayList<Room> getRooms() {
     	return rooms;
+    }
+    public static Room getRoom(int num) {
+        for (Room r : rooms) {
+            if(r.getNum() == num) {
+                return r;
+            }
+        }
+        return null;
     }
 }

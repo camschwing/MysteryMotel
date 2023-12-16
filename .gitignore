@@ -2,8 +2,12 @@
 /.project
 /.classpath
 /.DS_Store
+/MysteryMotel.iml
+/qodana.yaml
 main/.DS_Store
 bin/.DS_Store
 bin/.classpath
 bin/.project
 bin/.settings
+out/
+/.idea/

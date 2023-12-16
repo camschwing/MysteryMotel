@@ -7,18 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-public class MysteryMotel {       
-	protected static ArrayList<Item> inventory = new ArrayList<>();
-	protected static boolean investigatedCrimeScene = false;
+public class MysteryMotel {
+    private static final boolean escaped = false;
+    private static final Scanner scanner = new Scanner(System.in);
+
     protected static boolean diedInvestigating = false;
 	protected static boolean accused = false;
     protected static boolean entered = false;
     protected static Room currentRoom;
-	protected static Item book;
 	protected static int yIndex;
-	
-    private static final boolean escaped = false;
-    private static final Scanner scanner = new Scanner(System.in);
+
+    public static String commandOutput = "";
+    public static boolean printGui = true;
+
 
     public static void main(String[] args) throws IOException, InterruptedException {
         initializeGame();
@@ -26,7 +27,8 @@ public class MysteryMotel {
         while (true) {
             printRoom();
             String command = getUserInput();
-            Commands.processCommand(command);
+            String[] cmdArray = command.split(" ");
+            Commands.processCommand(cmdArray);
             
             if (gameOver()) {
                 System.out.println("Game Over");
@@ -39,9 +41,14 @@ public class MysteryMotel {
     public static void initializeGame() throws IOException {
    	 	intro();
 
+        ArrayList<Item> room3Items = new ArrayList<>() {{
+            add(new Item("Key", "An old rusty key"));
+            add(new Item("Clock", "A weird Clock"));
+        }};
+
     	new Map();
-        new Room(1, "dark room", new Item("Key", "An old rusty key."), 2, 0);
-        new Room(2, "motel lobby", new Item("Book", "A book with strange symbols."), 2, 1);
+        new Room(1, "dark room", room3Items, 2, 0);
+        new Room(2, "motel lobby", new Item("Book", "A book with strange symbols"), 2, 1);
         new Room(3, "Room #23", new Item("Bloody Knife", "A bloody kitchen knife"), 1, 0);
        
         Commands.enterRoom(1);
@@ -69,11 +76,21 @@ public class MysteryMotel {
    
     private static void printRoom() {
     	if (entered) {entered = false;}
-        //Gui.displayGui();
+        if (printGui) {
+            if (currentRoom.getSearched()) {
+                Gui.displayGui(Strings.itemGui, Commands.getCommandOutput());
+            }
+            else {
+                Gui.displayGui(Strings.gui, Commands.getCommandOutput());
+            }
+        }
+        else {
+            printGui = true;
+        }
     }
 
     public static String getUserInput() {
-        System.out.print("Enter command: ");
+        System.out.print(": ");
         return scanner.nextLine().toLowerCase();
     }
     

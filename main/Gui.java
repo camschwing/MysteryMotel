@@ -3,45 +3,34 @@ package main;
 import java.util.Scanner;
 
 public class Gui {
-    private static final String gui = """
-            ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-            │ Current Room: %s                                                                                                   │
-            │                                                                                                                    │
-            │ Items in Room: %s                                                                                                  │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            │                                                                                                                    │
-            └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘""";
-
-    public static void displayGui() {
-        System.out.println(loadGui());
+    public static void displayGui(String gui, String CommandOut) {
+        System.out.println(loadGui(gui, CommandOut));
     }
 
     public static String getItems() {
         StringBuilder items = new StringBuilder();
         for (Item i : MysteryMotel.getCurrentRoom().getItems()) {
-            items.append(i.getName()).append(", ");
+            String description = String.format(" (%s)", i.getDescription());
+            items.append(i.getName()).append(description).append(", ");
         }
         if (!items.isEmpty()) {
             items.delete(items.length() - 2, items.length() - 1);
         }
         else {
             items.append("Room is Empty");
+        }
+        return items.toString();
+    }
+    public static String getInventory() {
+        StringBuilder items = new StringBuilder();
+        for (Item i : Character.getInventory()) {
+            items.append(i.getName()).append(", ");
+        }
+        if (!items.isEmpty()) {
+            items.delete(items.length() - 2, items.length() - 1);
+        }
+        else {
+            items.append("empty");
         }
         return items.toString();
     }
@@ -69,10 +58,22 @@ public class Gui {
         return finalMap.toString();
     }
 
-    private static String loadGui() {
-        Scanner scGui = new Scanner(String.format(gui, MysteryMotel.getCurrentRoom().getName(), getItems()));
+    private static String loadGui(String gui, String CommandOut) {
+        Scanner scGui = new Scanner("");
         StringBuilder loadedGui = new StringBuilder();
         StringBuilder sbLine;
+        scGui.reset();
+
+        scGui = switch (gui) {
+            case Strings.gui ->
+                    new Scanner(String.format(gui, MysteryMotel.getCurrentRoom().getName(), getInventory(), ("* " + CommandOut)));
+            case Strings.itemGui ->
+                new Scanner(String.format(gui, MysteryMotel.getCurrentRoom().getName(), getItems(), getInventory(), ("* " + CommandOut)));
+
+            case Strings.helpGui ->
+                    new Scanner(gui);
+            default -> scGui;
+        };
 
         while (scGui.hasNextLine()) {
             String line = scGui.nextLine();
@@ -84,8 +85,12 @@ public class Gui {
             loadedGui.append(sbLine).append("\n");
         }
 
-        loadedGui.replace(0, loadedGui.length()-1, loadMiniMap(loadedGui));
-
+        if (gui.equals(Strings.helpGui)) {
+            return loadedGui.deleteCharAt(loadedGui.length()-1).toString();
+        }
+        else {
+            loadedGui.replace(0, loadedGui.length() - 1, loadMiniMap(loadedGui)).deleteCharAt(loadedGui.length() - 1);
+        }
         return loadedGui.deleteCharAt(loadedGui.length()-1).toString();
     }
 }

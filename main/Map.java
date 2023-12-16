@@ -3,16 +3,7 @@ package main;
 import java.util.*;
 
 public class Map {
-	private static final String miniRoom = """
-			┌───┐
-			│   │
-			└───┘
-			""";
-	private static final String miniEmptyRoom = """
-                    \s
-                    \s
-                    \s
-                """;
+
 	private static final ArrayList<ArrayList<Integer>> xy = new ArrayList<>();
 	private static final List<Map> mapRooms = new ArrayList<>();
 	private final String strRoom;
@@ -22,18 +13,17 @@ public class Map {
 	private int y;
 
 	public Map(int num, Room room, int x, int y) {
-		this.id = id(x, y);
+		this.id = Commands.id(x, y);
 		this.x = x;
 		this.y = y;
         this.room = room;
-		strRoom = String.format(
-                """
-                        ┌───────┐
-                        │ROOM %s│
-                        │       │
-                        │       │
-                        └───────┘
-                        """, "0"+num);
+
+		if(num < 10) {
+			strRoom = String.format(Strings.Room, "0"+num);
+		}
+		else {
+			strRoom = String.format(Strings.Room, num);
+		}
 		
 		xy.add(new ArrayList<>(Arrays.asList(x, y)));
 		MysteryMotel.yIndex += 2;
@@ -42,21 +32,11 @@ public class Map {
 	
 	public Map() {
 		this.id = 0;
-		strRoom = """
-                        \s
-                        \s
-                        \s
-                        \s
-                        \s
-                """;
+		strRoom = Strings.EmptyRoom;
 		
 		mapRooms.addFirst(this);
 	}
 
-	public static int id(int x, int y) {
-        return (3*y) + x;
-	}
-	
 	public static List<Map> getMapRooms() { return mapRooms; }
 	private String getRoom() { return strRoom; }
 	public Room getObjRoom() { return room; }
@@ -92,7 +72,7 @@ public class Map {
 		int tot;
 		
 		for (ArrayList<Integer> b : xy) {
-			tot = id(b.get(0), b.get(1));
+			tot = Commands.id(b.get(0), b.get(1));
 			listID.add(tot);
 		} 
 		listID.sort(Collections.reverseOrder());
@@ -108,13 +88,13 @@ public class Map {
 
 	private static String updateMiniRoom(Map m) {
 		ArrayList<Integer> listID = new ArrayList<>();
-		StringBuilder printRoom = new StringBuilder(miniRoom);
+		StringBuilder printRoom = new StringBuilder(Strings.miniRoom);
 		int cID = MysteryMotel.getCurrentRoom().getID();
 		int i = m.getID();
 		int tot;
 
 		for (ArrayList<Integer> b : xy) {
-			tot = id(b.get(0), b.get(1));
+			tot = Commands.id(b.get(0), b.get(1));
 			listID.add(tot);
 		}
 		listID.sort(Collections.reverseOrder());
@@ -148,7 +128,7 @@ public class Map {
 		int tot;
 		
 		for (ArrayList<Integer> b : Map.xy) {
-			tot = id(b.get(0), b.get(1));
+			tot = Commands.id(b.get(0), b.get(1));
 			listID.add(tot);
 		}
 		listID.sort(Collections.reverseOrder());
@@ -159,6 +139,7 @@ public class Map {
 	}
 	
 	public static void displayMap() {
+		Commands.pausePrintGui();
 		ArrayList<Map> listRoom = sortArray();
 		int minX = 100;
 		int minY = 100;
@@ -181,7 +162,7 @@ public class Map {
 
                     """;
 			for (int x = minX; x <= maxX; x++) {
-				int id = id(x, y);
+				int id = Commands.id(x, y);
 				try {yString = conjoin(yString, updateRoom(Objects.requireNonNull(getMap(id))));}
 				catch(Exception e) {yString = conjoin(yString, Objects.requireNonNull(getMap(0)).getRoom());}
 			}
@@ -211,9 +192,9 @@ public class Map {
  
                     """;
 			for (int x = minX; x <= maxX; x++) {
-				int id = id(x, y);
+				int id = Commands.id(x, y);
 				try {yString = conjoin(yString, updateMiniRoom(Objects.requireNonNull(getMap(id))));}
-				catch(Exception e) {yString = conjoin(yString, miniEmptyRoom);}
+				catch(Exception e) {yString = conjoin(yString, Strings.miniEmptyRoom);}
 			}
 			finalMap.append(yString).append("\n");
 		}
