@@ -27,7 +27,7 @@ public class Character {
                 "If you are here to question me about that murder then don't bother.",
                 "I have done nothing wrong and have no reason to hide anything.",
                 "",
-                "Instead of bothering me, why don't you go bother Eleanor down the hall from here.",
+                "Instead of bothering me, why don' you go bother Eleanor down the hall from here.",
                 ""
         }),
         ELEANOR(new String[]{
