@@ -39,7 +39,41 @@ public class Character {
                 "Well, hello there, detective. I'm Beatrice. I thought you were going to come by here.",
                 "I tend to the flowers here in the conservatory. I promise I am quite innocent. I am here day and night.",
                 "Who do you think has done this terrible crime."
+        }),
+
+        LETTER1(new String[]{
+                "╭──────────────────────────────────────────╮",
+                "| \\                                      / |",
+                "|   \\                                  /   |",
+                "|     \\                              /     |",
+                "|       \\                          /       |",
+                "|         \\                      /         |",
+                "|           \\                  /           |",
+                "|             \\              /             |",
+                "|               \\          /               |",
+                "|                 \\      /                 |",
+                "|                   \\  /                   |",
+                "|                     \\/                   |",
+                "|                                          |",
+                "╰──────────────────────────────────────────╯"
+        }),
+        LETTER(new String[]{
+                "╭──────────────────────────────────────────────────────╮",
+                "| Dearest Alissa,                                      |",
+                "|     I've been holding onto something I need to share.|",
+                "| Despite the rejections, I can't ignore how much you  |",
+                "| mean to me. Your laughter, kindness, and spirit have |",
+                "| captivated me since we met. I wanted you to know how |",
+                "| special you are to me. I cherish our moments together|",
+                "| and look forward to more. I can't help it, I need you|",
+                "| as my partner for life. Please take me, I'm not sure |",
+                "| what I would do without you.                         |",
+                "|                                                      |",
+                "| With all my love and affection,                      |",
+                "|     Victor                                           |",
+                "╰──────────────────────────────────────────────────────╯"
         });
+
 
         final String[] dialogue;
 

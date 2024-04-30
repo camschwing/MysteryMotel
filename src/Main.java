@@ -1,3 +1,4 @@
+
 //Jack, Cam, Luke
 public class Main {
     //Commands object to call Commands methods and variables
@@ -23,6 +24,8 @@ public class Main {
         Room room3 = new Room("Room #12", new Position(-1, 1));
         Room room4 = new Room("Room #17", new Position(-2, 1));
         Room room5 = new Room("Conservatory", new Position(0,2));
+        Room room6 = new Room("Room #32", new Position(1,1));
+
 
         //Instantiate Character objects
         new Character("Winston", new Position(0,0));
@@ -37,6 +40,7 @@ public class Main {
         new Item("Letter", "letter professing love to Alissa, but returned to sender", room3);
         new Item("Money", "roll of money amounting to 10 thousands dollars", room4);
         new Item("Rose", "rose pedal with a very deep red color", room5);
+        new Item("tulip", "tulip pedal with a light purple color", room6);
 
         room1.setEntered();
         room2.setLocked(true);

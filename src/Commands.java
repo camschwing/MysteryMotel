@@ -1,6 +1,7 @@
 import java.util.Objects;
 import java.util.Scanner;
 
+
 public class Commands {
     //Command output
     private static final StringBuilder commandOut = new StringBuilder("* ");
@@ -34,30 +35,50 @@ public class Commands {
                 case "east":
                 case "west":
                     move(cmd[0]);
-                    break;
-                case "help":
-                    System.out.println("Help - Commands\n\n* Movement\nnorth - Move north\nsouth - Move south\neast  - Move east\nwest  - Move west\n\n* General\nmap - display a map of the rooms you visited\ntalk <person> - talk with someone\nsearch - Search room for items\ninventory - See your inventory\nget <item> - Add item to inventory\naccuse <person> - accuse whoever you think committed the crime");
-                    break;
-                case "map":
+                    getAllRooms();
                     map();
                     break;
+                case "help":
+                    System.out.println("Help - Commands\n\n* Movement\nnorth - Move north\nsouth - Move south\neast  - Move east\nwest  - Move west\n\n* General\ntalk <person> - talk with someone\nsearch - Search room for items\ninventory - See your inventory\nget <item> - Add item to inventory\naccuse <person> - accuse whoever you think committed the crime");
+                    break;
                 case "get":
+                    getAllRooms();
+                    map();
                     getItem(cmd[1]);
                     break;
                 case "talk":
+                    getAllRooms();
+                    map();
                     System.out.println(getDialogue(cmd[1]));
                     break;
                 case "search":
+                    getAllRooms();
+                    map();
                     System.out.println(search());
                     break;
                 case "inventory":
+                    getAllRooms();
+                    map();
                     System.out.println(inventory());
                     break;
                 case "accuse":
                     accuse(cmd[1]);
                     break;
                 case "use":
+                    getAllRooms();
+                    map();
                     commandOut.append(use(cmd[1]));
+                    break;
+                case "letter":
+                    System.out.println(getDialogue("letter"));
+                    break;
+                case "unlock":
+                    setAll(true);
+                    map();
+                    break;
+                case "lock":
+                    setAll(false);
+                    map();
                     break;
                 default:
                     //Default when given command does not match any know commands
@@ -67,7 +88,22 @@ public class Commands {
             commandOut.append("Invalid Command usage! Try again.");
         }
     }
+    private static void setAll(boolean bool){
+        for (Room r : Room.getRooms()){
+            if(r.getRoomNum()!= 1) {
+                r.setEnteredVal(bool);
+            }
+        }
+    }
+    private static void getAllRooms() {
 
+        for (Room r : Room.getRooms()){
+            if (r.getEntered()){
+                System.out.print("Room number " + r.getRoomNum() + " = " + r.getName() + ";    ");
+            }
+        }
+        System.out.println();
+    }
     private static String getUsrInput() {
         //Prefix to user input
         System.out.print(": ");
@@ -118,6 +154,36 @@ public class Commands {
         StringBuilder line;
 
         if (name.equalsIgnoreCase("intro")) {
+            for (Character.Dialogues d : Character.Dialogues.values()) {
+                if (d.name().equalsIgnoreCase(name)) {
+                    //Center each line
+                    for (String s : d.dialogue) {
+                        line = new StringBuilder(s);
+                        for (int x = 1; x < 58 - (s.length() / 2); x++) {
+                            line.insert(0, ' ');
+                        }
+                        dialogue.append(line).append("\n");
+                    }
+                }
+                return dialogue.toString();
+            }
+        }
+        if (name.equalsIgnoreCase("LETTER")) {
+            for (Character.Dialogues d : Character.Dialogues.values()) {
+                if (d.name().equalsIgnoreCase(name)) {
+                    //Center each line
+                    for (String s : d.dialogue) {
+                        line = new StringBuilder(s);
+                        for (int x = 1; x < 58 - (s.length() / 2); x++) {
+                            line.insert(0, ' ');
+                        }
+                        dialogue.append(line).append("\n");
+                    }
+                }
+                return dialogue.toString();
+            }
+        }
+        if (name.equalsIgnoreCase("LETTER1")) {
             for (Character.Dialogues d : Character.Dialogues.values()) {
                 if (d.name().equalsIgnoreCase(name)) {
                     //Center each line
@@ -264,6 +330,11 @@ public class Commands {
                     usr.removeInventory(i);
                     return "You used the Key!";
                 }
+                if (i.getName().equalsIgnoreCase("letter")) {
+                    return getDialogue("letter");
+                    /*wait(1000);
+                    System.out.println(getDialogue("letter"));*/
+                }
             }
             else {
                 return "Item can not be used!";
@@ -407,3 +478,7 @@ public class Commands {
         }
     }
 }
+
+
+
+

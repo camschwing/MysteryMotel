@@ -72,6 +72,9 @@ public class Room {
     public void setEntered() {
         this.entered = true;
     }
+    public void setEnteredVal(boolean bool) {
+        this.entered = bool;
+    }
     public void setSearched() {
         this.searched = true;
     }
@@ -85,3 +88,5 @@ public class Room {
         items.remove(item);
     }
 }
+
+
