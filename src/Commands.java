@@ -70,7 +70,9 @@ public class Commands {
                     commandOut.append(use(cmd[1]));
                     break;
                 case "letter":
-                    System.out.println(getDialogue("letter"));
+                    String s = "╭──────────────────────────────────────────────────────╮\n| Dearest Alissa,                                      |\n|     I've been holding onto something I need to share.| \n| Despite the rejections, I can't ignore how much you  |\n| mean to me. Your laughter, kindness, and spirit have |\n| captivated me since we met. I wanted you to know how |\n| special you are to me. I cherish our moments together|\n| and look forward to more. I can't help it, I need you|\n| as my partner for life. Please take me, I'm not sure |\n| what I would do without you.                         |\n|                                                      |\n| With all my love and affection,                      |\n|     Victor                                           |\n╰──────────────────────────────────────────────────────╯";
+                    //wait(1000);
+                    System.out.println(s);
                     break;
                 case "unlock":
                     setAll(true);
@@ -131,13 +133,32 @@ public class Commands {
         if (Objects.requireNonNull(getCurrentRoom()).getSearched()) {
             //Find specified Item
             for (Item i : Objects.requireNonNull(getCurrentRoom()).getItems()) {
+                if (i.getName().equalsIgnoreCase("letter")){
+                    String letter1 = "╭──────────────────────────────────────────╮\n" +
+                            "| \\                                      / |\n" +
+                            "|   \\                                  /   |\n" +
+                            "|     \\                              /     |\n" +
+                            "|       \\                          /       |\n" +
+                            "|         \\                      /         |\n" +
+                            "|           \\                  /           |\n" +
+                            "|             \\              /             |\n" +
+                            "|               \\          /               |\n" +
+                            "|                 \\      /                 |\n" +
+                            "|                   \\  /                   |\n" +
+                            "|                    \\/                    |\n" +
+                            "|                                          |\n" +
+                            "╰──────────────────────────────────────────╯";
+                    System.out.println(letter1);
+                    System.out.println("Use command 'letter' to open.");
+                }
                 if (i.getName().equalsIgnoreCase(item)) {
                     usr.addInventory(i);
                     getCurrentRoom().removeItem(i);
-                    commandOut.append("You picked up ").append(i.getName());
+                    commandOut.append("You picked up the ").append(i.getName());
                     return;
                 }
             }
+
             commandOut.append("Item not found!");
         } else {
             commandOut.append("You have not searched the room yet!");

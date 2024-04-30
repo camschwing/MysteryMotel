@@ -42,9 +42,15 @@ public class Main {
         new Item("Rose", "rose pedal with a very deep red color", room5);
         new Item("tulip", "tulip pedal with a light purple color", room6);
 
+        //String s = "╭──────────────────────────────────────────────────────╮\n| Dearest Alissa,                                      |\n|     I've been holding onto something I need to share.| \n| Despite the rejections, I can't ignore how much you  |\n| mean to me. Your laughter, kindness, and spirit have |\n| captivated me since we met. I wanted you to know how |\n| special you are to me. I cherish our moments together|\n| and look forward to more. I can't help it, I need you|\n| as my partner for life. Please take me, I'm not sure |\n| what I would do without you.                         |\n|                                                      |\n| With all my love and affection,                      |\n|     Victor                                           |\n╰──────────────────────────────────────────────────────╯";
+
         room1.setEntered();
         room2.setLocked(true);
         System.out.println("\n\n");
         System.out.println(c.getDialogue("intro"));
+        //System.out.println(s);
+
+
+
     }
 }
