@@ -133,6 +133,18 @@ public class Commands {
         if (Objects.requireNonNull(getCurrentRoom()).getSearched()) {
             //Find specified Item
             for (Item i : Objects.requireNonNull(getCurrentRoom()).getItems()) {
+                if (i.getName().equalsIgnoreCase("key")){
+                    System.out.println("🔑");
+                }
+                if (i.getName().equalsIgnoreCase("rose")){
+                    System.out.println("🌹");
+                }
+                if (i.getName().equalsIgnoreCase("knife")){
+                    System.out.println("🔪");
+                }
+                if (i.getName().equalsIgnoreCase("money")){
+                    System.out.println("💵");
+                }
                 if (i.getName().equalsIgnoreCase("letter")){
                     String letter1 = "╭──────────────────────────────────────────╮\n" +
                             "| \\                                      / |\n" +
