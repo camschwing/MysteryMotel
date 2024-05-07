@@ -70,9 +70,13 @@ public class Commands {
                     commandOut.append(use(cmd[1]));
                     break;
                 case "letter":
+                    for(int j = 0; j < 15; j++){
+                        Thread.sleep(250);
+                        System.out.println();
+                    }
                     String s = "╭──────────────────────────────────────────────────────╮\n| Dearest Alissa,                                      |\n|     I've been holding onto something I need to share.| \n| Despite the rejections, I can't ignore how much you  |\n| mean to me. Your laughter, kindness, and spirit have |\n| captivated me since we met. I wanted you to know how |\n| special you are to me. I cherish our moments together|\n| and look forward to more. I can't help it, I need you|\n| as my partner for life. Please take me, I'm not sure |\n| what I would do without you.                         |\n|                                                      |\n| With all my love and affection,                      |\n|     Victor                                           |\n╰──────────────────────────────────────────────────────╯";
                     //wait(1000);
-                    System.out.println(s);
+                    printWithDelay(s);
                     break;
                 case "unlock":
                     setAll(true);
@@ -128,7 +132,7 @@ public class Commands {
     }
 
     //Add specified item from Room to inventory
-    private static void getItem(String item) {
+    private static void getItem(String item) throws InterruptedException {
         //Check if currentRoom has been searched already
         if (Objects.requireNonNull(getCurrentRoom()).getSearched()) {
             //Find specified Item
@@ -160,6 +164,7 @@ public class Commands {
                             "|                    \\/                    |\n" +
                             "|                                          |\n" +
                             "╰──────────────────────────────────────────╯";
+
                     System.out.println(letter1);
                     System.out.println("Use command 'letter' to open.");
                 }
@@ -508,6 +513,17 @@ public class Commands {
             }
             //Print y line of rooms
             System.out.println(yString);
+        }
+    }
+    public static void printWithDelay(String str) {
+        try {
+            for (char c : str.toCharArray()) {
+                System.out.print(c);
+                Thread.sleep(90);
+            }
+            System.out.println(); // Move to the next line after printing the string
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }
