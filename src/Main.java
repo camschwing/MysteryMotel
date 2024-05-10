@@ -53,12 +53,18 @@ public class Main {
 
         room1.setEntered();
         room2.setLocked(true);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         System.out.println(s);
         for(int j = 0; j < 28; j++){
             Thread.sleep(175);
             System.out.println();
         }
-        c.printWithDelay(c.getDialogue("intro"));
+        System.out.println(c.getDialogue("intro"));
         //System.out.println(s);
 
 
